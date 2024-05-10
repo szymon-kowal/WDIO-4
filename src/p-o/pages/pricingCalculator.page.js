@@ -1,3 +1,4 @@
+import { $ } from '@wdio/globals';
 import DefaultPage from '../basic.page.js';
 import CommonHeader from '../components/common/commonHeader.component.js';
 import MidStart from '../components/pricingCalculator/midStart.component.js';
@@ -15,5 +16,24 @@ export default class PricingCalculatorPage extends DefaultPage {
         this.computeEngineForm = new ComputeEngineForm();
         this.costDetailPanel = new CostDetailPanel();
         this.shareEstimatePopup = new ShareEstimatePopup();
+    }
+
+    async getCloseBtnPopup() {
+        try {
+            const element = await $('span.close');
+            if (
+                await element.waitForDisplayed({
+                    timeout: 9500,
+                    reverse: false,
+                })
+            ) {
+                await element.click();
+            }
+        } catch (error) {
+            console.log(
+                'span.close is not displayed or not clickable',
+                error.message
+            );
+        }
     }
 }

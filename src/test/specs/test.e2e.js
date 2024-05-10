@@ -4,7 +4,8 @@ import IndexPage from '../../p-o/pages/index.page.js';
 import PricingCalculatorPage from '../../p-o/pages/pricingCalculator.page.js';
 import CostSummaryPage from '../../p-o/pages/costSummary.page.js';
 import SearchResultPage from '../../p-o/pages/searchResult.page.js';
-import { baseTestData } from '../../p-o/test-data/baseTestData.js';
+import { baseTestData } from '../../test-data/baseTestData.js';
+import { moreExpensiveEnigneTestData } from '../../test-data/moreExpensiveEnigneTestData.js';
 import Helpers from '../../p-o/helpers/helpers.js';
 
 const indexPage = new IndexPage();
@@ -77,9 +78,25 @@ describe('Google Cloud Platform Pricing Calculator', () => {
             await pricingCalculatorPage.addToEstimateModal.rootEl.isDisplayed()
         ).to.be.true;
     });
+});
 
-    it('should calculate the cost for specific compute engine settings', async () => {
-        const testData = baseTestData;
+describe('Google Cloud Platform Pricing Calculator displays correct data on summary', () => {
+    beforeEach(async () => {
+        await indexPage.open();
+        await indexPage.removePopups();
+    });
+
+    checkIfDataIsDisplayedOnLastPage(baseTestData, 'Base test data');
+    checkIfDataIsDisplayedOnLastPage(
+        moreExpensiveEnigneTestData,
+        'More Expensive test data'
+    );
+});
+
+function checkIfDataIsDisplayedOnLastPage(inpTestData, testDataName) {
+    it(`should calculate the cost and display it for specific compute engine settings with : ${testDataName}`, async () => {
+        // Change test data here
+        const testData = inpTestData;
         await indexPage.header.searchBar.click();
         await indexPage.header.searchBar.setValue(
             'Google Cloud Platform Pricing Calculator'
@@ -108,12 +125,16 @@ describe('Google Cloud Platform Pricing Calculator', () => {
         );
 
         await pricingCalculatorPage.addToEstimateModal.getComputeEngineBtn.click();
+
         // Fill out the form
+
+        await pricingCalculatorPage.getCloseBtnPopup();
 
         // Number of instances: 4
         await pricingCalculatorPage.computeEngineForm.getNumberOfInstancesInput.setValue(
             testData.numberOfInstances
         );
+
         //    * What are these instances for?: leave blank
         //    * Operating System / Software: Free: Debian, CentOS, CoreOS, Ubuntu, or another User-Provided OS
         await pricingCalculatorPage.computeEngineForm.getOperatingSystemSoftwareInput.click();
@@ -192,6 +213,11 @@ describe('Google Cloud Platform Pricing Calculator', () => {
         //    * Local SSD: 2x375 Gb
 
         await pricingCalculatorPage.computeEngineForm.getLocalSSDInput.click();
+        await Helpers.waitUntilHelper(
+            pricingCalculatorPage.computeEngineForm.getLocalSSDOption(
+                testData.localSSD
+            )
+        );
         await pricingCalculatorPage.computeEngineForm
             .getLocalSSDOption(testData.localSSD)
             .click();
@@ -274,4 +300,5 @@ describe('Google Cloud Platform Pricing Calculator', () => {
         expect(regionSelect).to.equal(testData.regionSelect);
         expect(commitedUseDiscount).to.equal(testData.commitedUseDiscount);
     });
-});
+}
+// Need to create 2nd instance of test for different data

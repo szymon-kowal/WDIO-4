@@ -13,8 +13,8 @@ export default class Helpers {
                 return await param.isDisplayed();
             },
             {
-                timeout: 5000,
-                timeoutMsg: 'Expected element to be displayed after 5 seconds',
+                timeout: 8000,
+                timeoutMsg: 'Expected element to be displayed after 8 seconds',
             }
         );
     }
