@@ -61,19 +61,26 @@ export default class ComputeEngineForm {
             'Paid: Red Hat Enterprise Linux for SAP with HA and Update Services':
                 'paid-red-hat-enterprise-linux-for-sap-with-ha-and-update-services',
         };
-        return $(
-            `//ul[@aria-label="Operating System / Software"]/*[@data-value="${selector[option]}"]`
-        );
+        const outputPath = `//ul[@aria-label="Operating System / Software"]/*[@data-value="${selector[option]}"]`;
+
+        Helpers.waitUntilElementIsBeingDisplayed($(outputPath));
+
+        return $(outputPath);
     }
 
-    getProvisioningModelOption(option) {
+    async selectOperatingSystemSoftwareOption(option) {
+        await this.getOperatingSystemSoftwareInput.click();
+        await this.getOperatingSystemSoftwareOption(option).click();
+    }
+
+    async clickOnProvisioningModelOption(option) {
         const selector = {
             Regular: 'regular',
             'Spot (Preemptible VM)': 'spot',
         };
-        return $(
-            `//*[@data-field-type="107"]//*[@id="${selector[option]}"]/..`
-        );
+        const path = `//*[@data-field-type="107"]//*[@id="${selector[option]}"]/..`;
+        await $(path).waitForClickable();
+        await $(path).click();
     }
 
     getMachineFamilyOption(option) {
@@ -86,6 +93,12 @@ export default class ComputeEngineForm {
         );
     }
 
+    async selectMachineFamilyOption(option) {
+        await this.getMachineFamilyInput.click();
+        await this.getMachineFamilyOption(option).waitForClickable();
+        await this.getMachineFamilyOption(option).click();
+    }
+
     getSeriesOption(option) {
         const selector = {
             n1: 'n1',
@@ -96,6 +109,11 @@ export default class ComputeEngineForm {
         );
     }
 
+    async selectSeriesOption(option) {
+        await this.getSeriesInput.click();
+        await this.getSeriesOption(option).click();
+    }
+
     getMachineTypeOption(option) {
         const selector = {
             'n1-standard-8': 'n1-standard-8',
@@ -104,6 +122,11 @@ export default class ComputeEngineForm {
         return $(
             `//ul[@aria-label="Machine type"]//*[@data-value="${selector[option]}"]`
         );
+    }
+
+    async selectMachineTypeOption(option) {
+        (await this.getMachineTypeInput).click();
+        (await this.getMachineTypeOption(option)).click();
     }
 
     getGpuModelOption(option) {
@@ -117,6 +140,14 @@ export default class ComputeEngineForm {
         );
     }
 
+    async selectGpuModelOption(option) {
+        (await this.getGpuModelInput).click();
+        await Helpers.waitUntilElementIsBeingDisplayed(
+            this.getGpuModelOption(option)
+        );
+        await this.getGpuModelOption(option).click();
+    }
+
     getNumberOfGPUsOption(option) {
         const selector = {
             1: '1',
@@ -125,6 +156,11 @@ export default class ComputeEngineForm {
         return $(
             `//ul[@aria-label="Number of GPUs"]//*[@data-value="${selector[option]}"]`
         );
+    }
+
+    async selectNumberOfGPUsOption(option) {
+        (await this.getNumberOfGPUsInput).click();
+        (await this.getNumberOfGPUsOption(option)).click();
     }
 
     getLocalSSDOption(option) {
@@ -137,6 +173,14 @@ export default class ComputeEngineForm {
         );
     }
 
+    async selectLocalSSDOption(option) {
+        (await this.getLocalSSDInput).click();
+        await Helpers.waitUntilElementIsBeingDisplayed(
+            this.getLocalSSDOption(option)
+        );
+        (await this.getLocalSSDOption(option)).click();
+    }
+
     getRegionSelectOption(option) {
         const selector = {
             'Netherlands (europe-west4)': 'europe-west4',
@@ -145,6 +189,11 @@ export default class ComputeEngineForm {
         return $(
             `//ul[@aria-label="Region"]//*[@data-value="${selector[option]}"]`
         );
+    }
+
+    async selectRegionSelectOption(option) {
+        (await this.getRegionInput).click();
+        (await this.getRegionSelectOption(option)).click();
     }
 
     getCommitedUseDiscountOption(option) {

@@ -10,8 +10,15 @@ export default class AddToEstimateModal {
         return this.rootEl.$(Helpers.findByTextWithXPath(param));
     }
 
-    get getComputeEngineBtn() {
-        return this.rootEl.$('//div[@data-service-form="8"]');
+    async getComputeEngineBtn() {
+        const selector = this.rootEl.$('//div[@data-service-form="8"]');
+        return selector;
+    }
+
+    async waitAndClickForComputeEngineBtn() {
+        const selector = this.rootEl.$('//div[@data-service-form="8"]');
+        await Helpers.waitUntilElementIsBeingDisplayed(selector);
+        await selector.click();
     }
 
     items(param) {

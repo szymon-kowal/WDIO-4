@@ -7,7 +7,7 @@ export default class Helpers {
     static getObjByDataValue(dataValueStr) {
         return `//*[@data-value="${dataValueStr}"]`;
     }
-    static async waitUntilHelper(param) {
+    static async waitUntilElementIsBeingDisplayed(param) {
         await browser.waitUntil(
             async () => {
                 return await param.isDisplayed();
